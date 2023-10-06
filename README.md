@@ -30,7 +30,3 @@ AAU I want to...
 <img src="public/wireframe3.png" alt="wireframe">
 <img src="public/wireframe4.png" alt="wireframe">
 
-
-### ERD
-
-<img src="./public/erd.png" alt="entity relationship diagram">
