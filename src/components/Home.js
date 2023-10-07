@@ -3,9 +3,9 @@ const Home = (props) => {
 	console.log('props in home', props)
 
 	return (
-		<>
-			<h2>Home Page</h2>
-		</>
+		<div className="m-5">
+			<h2>Home Page of the Trading App</h2>
+		</div>
 	)
 }
 
