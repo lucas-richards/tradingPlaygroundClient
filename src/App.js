@@ -12,6 +12,9 @@ import SignUp from './components/auth/SignUp'
 import SignIn from './components/auth/SignIn'
 import SignOut from './components/auth/SignOut'
 import ChangePassword from './components/auth/ChangePassword'
+import StocksIndex from './components/stocks/StocksIndex'
+import StockCreate from './components/stocks/StockCreate'
+import StockShow from './components/stocks/StockShow'
 
 const App = () => {
 
@@ -53,21 +56,39 @@ const App = () => {
 						path='/sign-in'
 						element={<SignIn msgAlert={msgAlert} setUser={setUser} />}
 					/>
-          <Route
-            path='/sign-out'
-            element={
-              <RequireAuth user={user}>
-                <SignOut msgAlert={msgAlert} clearUser={clearUser} user={user} />
-              </RequireAuth>
-            }
-          />
-          <Route
-            path='/change-password'
-            element={
-              <RequireAuth user={user}>
-                <ChangePassword msgAlert={msgAlert} user={user} />
-              </RequireAuth>}
-          />
+					<Route
+						path='/sign-out'
+						element={
+						<RequireAuth user={user}>
+							<SignOut msgAlert={msgAlert} clearUser={clearUser} user={user} />
+						</RequireAuth>
+						}
+					/>
+					<Route
+						path='/change-password'
+						element={
+						<RequireAuth user={user}>
+							<ChangePassword msgAlert={msgAlert} user={user} />
+						</RequireAuth>}
+					/>
+					<Route
+						path='/create-stock'
+						element={
+						<RequireAuth user={user}>
+							<StockCreate msgAlert={msgAlert} user={user} />
+						</RequireAuth>}
+					/>
+					<Route
+						path='/stocks'
+						element={<StocksIndex msgAlert={msgAlert} />}
+					/>
+					<Route
+						path='/stocks/:id'
+						element={
+						<RequireAuth user={user}>
+							<StockShow msgAlert={msgAlert} user={user} />
+						</RequireAuth>}
+					/>
 				</Routes>
 				{msgAlerts.map((msgAlert) => (
 					<AutoDismissAlert
