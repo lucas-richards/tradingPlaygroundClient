@@ -1,7 +1,9 @@
+
 import { useState, useEffect } from 'react'
 import { Table, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import LoadingScreen from '../shared/LoadingScreen'
+import StockUpdate from './StockUpdate'
 
 // api function call from our api file
 import { getAllStocks } from '../../api/stock'
@@ -96,6 +98,7 @@ const StocksIndex = (props) => {
                 </tbody>
             </Table>
         </Container>
+        <StockUpdate />
       </>
     )
 }

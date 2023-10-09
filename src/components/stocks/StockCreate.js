@@ -69,7 +69,7 @@ const StockCreate = (props) => {
         e.preventDefault()
 
         axios.request({
-            url: `https://api.polygon.io/v3/reference/tickers?search=${ticker}&active=true&apiKey=Gix6f7hEpaZXp7fNoboim0QRYESppzrm`,
+            url: `https://api.polygon.io/v3/reference/tickers?search=${ticker}&active=true&apiKey=${process.env.api_twelve_data}`,
             method: 'GET',
             maxBodyLength: Infinity,
             headers: { }

@@ -1,4 +1,5 @@
 import axios from 'axios'
+require('dotenv').config(); 
 import { useState } from 'react';
 import {Button, Modal, Form } from 'react-bootstrap';
 
@@ -14,7 +15,7 @@ function StockCreateModal(props) {
       method: 'GET',
       maxBodyLength: Infinity,
       headers: { 
-          'X-RapidAPI-Key': '21c6f097c6mshfd061b7ceb83060p1b82ebjsna8e5a397603b', 
+          'X-RapidAPI-Key': `${process.env.X_RapidAPI_Key}`, 
           'X-RapidAPI-Host': 'twelve-data1.p.rapidapi.com'
         },
       })
