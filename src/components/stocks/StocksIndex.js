@@ -55,7 +55,7 @@ const StocksIndex = (props) => {
     
 
     const stockCards = stocks.map(stock => (
-        <Card key={ stock.id } style={{ width: '30%', margin: 5 }}>
+        <Card key={ stock.id } style={{ width: '100%', margin: 5 }}>
             <Card.Header>{ stock.symbol }</Card.Header>
             <Card.Body>
                 <Card.Text>
@@ -64,7 +64,9 @@ const StocksIndex = (props) => {
                     </Link>
                 </Card.Text>
                 { stock.owner ? 
-                    <Card.Footer>owner: {stock.owner.email}</Card.Footer>
+                    <Card.Footer>
+                        owner: {stock.owner.email}
+                    </Card.Footer>
                 : null }
             </Card.Body>
         </Card>

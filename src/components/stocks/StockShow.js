@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import { Container, Card, Button } from 'react-bootstrap'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { Container, Card} from 'react-bootstrap'
 import LoadingScreen from '../shared/LoadingScreen'
 // we'll need to import an api function to grab an individual stock
-import { getOneStock, removeStock } from '../../api/stock'
-import { showStockFailure, removeStockSuccess, removeStockFailure } from '../shared/AutoDismissAlert/messages'
+import { getOneStock} from '../../api/stock'
+import { showStockFailure} from '../shared/AutoDismissAlert/messages'
 
 
 const StockShow = (props) => {
@@ -43,29 +42,6 @@ const StockShow = (props) => {
             })
     }, [updated])
 
-    const setStockFree = () => {
-        // we want to remove the stock
-        removeStock(user, stock._id)
-            // send a success message
-            .then(() =>
-                msgAlert({
-                    heading: `${stock.symbol} has been set free!`,
-                    message: removeStockSuccess,
-                    variant: 'success',
-                })
-            )
-            // navigate the user to the home page(index)
-            .then(() => navigate('/'))
-            // send a fail message if there is an error
-            .catch(() =>
-                msgAlert({
-                    heading: 'Oh no!',
-                    message: removeStockFailure,
-                    variant: 'danger',
-                })
-            )
-    }
-
     if(!stock) {
         return <LoadingScreen />
     }
@@ -85,12 +61,9 @@ const StockShow = (props) => {
                              user && stock.owner._id === user._id
                             ?
                             <>
-                                <Button 
-                                    className="m-2" variant="danger"
-                                    onClick={() => setStockFree()}
-                                >
-                                    Delete
-                                </Button>
+                                <Link className='btn btn-danger' to='delete-stock'>
+				                    Delete Stock
+			                    </Link>
                             </>
                             :
                             null

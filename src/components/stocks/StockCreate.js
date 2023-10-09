@@ -4,12 +4,21 @@
 // we should send a success or failure message
 // on success, redirect to the new stock show page
 // on failure, component should send the message and remain visible
+import axios from 'axios'
 import { useState } from 'react'
 import { createStock } from '../../api/stock'
 import { createStockSuccess, createStockFailure } from '../shared/AutoDismissAlert/messages'
 // to redirect to a different component(page) we can use a hook from react-router
 import { useNavigate } from 'react-router-dom'
+import { Card } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 import StockForm from '../shared/StockForm'
+
+const cardContainerLayout = {
+    display: 'flex',
+    flexFlow: 'row wrap',
+    justifyContent: 'center'
+}
 
 
 const StockCreate = (props) => {
@@ -23,6 +32,9 @@ const StockCreate = (props) => {
         symbol: '',
         price: '',
     })
+
+    const [ticker, setTicker] = useState('')
+    const [tickers, setTickers] = useState([])
 
     const onChange = (e) => {
         // e is the placeholder for event
@@ -77,13 +89,63 @@ const StockCreate = (props) => {
             })
     }
 
+    const onSubmit2 = (e) => {
+        e.preventDefault()
+
+        axios.request({
+            url: `https://api.polygon.io/v3/reference/tickers?search=${ticker}&active=true&apiKey=Gix6f7hEpaZXp7fNoboim0QRYESppzrm`,
+            method: 'GET',
+            maxBodyLength: Infinity,
+            headers: { }
+          })
+            .then((response) => {
+                // console.log(JSON.stringify(response.results));
+                setTickers([response.results])
+                // return response
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+
+            
+    }
+
+    const onChange2 = (e) => {
+        // e is the placeholder for event
+        e.persist()
+
+        setTicker( e.target.value)
+    }
+
+    const tickerCards = tickers.map(ticker => (
+        <Card key={ ticker.ticker } style={{ width: '30%', margin: 5 }}>
+            <Card.Header>{ ticker.name }</Card.Header>
+            <Card.Body>
+                <Card.Text>
+                    <Link to={`/tickers/`} className='btn btn-info'>
+                        View { ticker.ticker }
+                    </Link>
+                </Card.Text>
+            </Card.Body>
+        </Card>
+    ))
+
+
     return (
-        <StockForm 
-            stock={stock} 
-            handleChange={onChange}
-            handleSubmit={onSubmit}
-            heading="Add a new Stock!"
-        />
+        <>
+            <StockForm 
+                stock={stock}
+                ticker={ticker}
+                handleChange={onChange}
+                handleChange2={onChange2}
+                handleSubmit={onSubmit}
+                handleSubmit2={onSubmit2}
+                heading="Add a new Stock!"
+            />
+            <div className="container-md" style={ cardContainerLayout }>
+                { tickerCards }
+            </div>
+        </>
     )
 }
 

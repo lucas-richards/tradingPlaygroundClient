@@ -15,6 +15,7 @@ import ChangePassword from './components/auth/ChangePassword'
 import StocksIndex from './components/stocks/StocksIndex'
 import StockCreate from './components/stocks/StockCreate'
 import StockShow from './components/stocks/StockShow'
+import StockDelete from './components/stocks/StockDelete'
 
 const App = () => {
 
@@ -80,13 +81,20 @@ const App = () => {
 					/>
 					<Route
 						path='/stocks'
-						element={<StocksIndex msgAlert={msgAlert} />}
+						element={<StocksIndex user={user} msgAlert={msgAlert} />}
 					/>
 					<Route
 						path='/stocks/:id'
 						element={
 						<RequireAuth user={user}>
 							<StockShow msgAlert={msgAlert} user={user} />
+						</RequireAuth>}
+					/>
+					<Route
+						path='/stocks/:id/delete-stock'
+						element={
+						<RequireAuth user={user}>
+							<StockDelete msgAlert={msgAlert} user={user} />
 						</RequireAuth>}
 					/>
 				</Routes>

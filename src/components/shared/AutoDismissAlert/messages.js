@@ -8,6 +8,8 @@ const messages = {
 	changePasswordFailure:'Failed to change passwords. Check your old password and try again.',
 	createStockSuccess: 'Great! A Stock was added to your list!',
 	createStockFailure: 'Oh no! Something went wrong, please try again',
+	removeStockSuccess: 'Stock Successfully removed!',
+	removeStockFailure: 'Oh no! Something went wrong, please try again',
 }
 
 module.exports = messages
