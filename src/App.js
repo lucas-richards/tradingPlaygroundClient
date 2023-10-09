@@ -22,9 +22,6 @@ const App = () => {
 	const [user, setUser] = useState(null)
 	const [msgAlerts, setMsgAlerts] = useState([])
 
-	console.log('user in app', user)
-	console.log('message alerts', msgAlerts)
-
   	useEffect(() => { 
 		// access localStorage
 		const loggedInUser = localStorage.getItem('user')

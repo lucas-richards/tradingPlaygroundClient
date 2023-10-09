@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card } from 'react-bootstrap'
+import { Table, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import LoadingScreen from '../shared/LoadingScreen'
 
@@ -9,11 +9,6 @@ import { getAllStocks } from '../../api/stock'
 // we need our messages from the autodismiss alert messaged file
 import messages from '../shared/AutoDismissAlert/messages'
 
-const cardContainerLayout = {
-    display: 'flex',
-    flexFlow: 'row wrap',
-    justifyContent: 'center'
-}
 
 const StocksIndex = (props) => {
     const [stocks, setStocks] = useState(null)
@@ -37,7 +32,7 @@ const StocksIndex = (props) => {
                 })
                 setError(true)
             })
-    }, [])
+    }, [msgAlert])
 
     // we need to account for multiple potential states of our data
     // if we have an error
@@ -55,27 +50,53 @@ const StocksIndex = (props) => {
     
 
     const stockCards = stocks.map(stock => (
-        <Card key={ stock.id } style={{ width: '100%', margin: 5 }}>
-            <Card.Header>{ stock.symbol }</Card.Header>
-            <Card.Body>
-                <Card.Text>
-                    <Link to={`/stocks/${stock._id}`} className='btn btn-info'>
-                        View { stock.symbol }
+        
+            <tr key={ stock._id }>
+
+                <td>
+                    <Link to={`/stocks/${stock._id}`} className=''>
+                      { stock.symbol }
                     </Link>
-                </Card.Text>
-                { stock.owner ? 
-                    <Card.Footer>
-                        owner: {stock.owner.email}
-                    </Card.Footer>
-                : null }
-            </Card.Body>
-        </Card>
+                </td>
+                <th>Name</th>
+                <td>{ stock.price }</td>
+                <th>Sparkline</th>
+                <th>last</th>
+                <th>change</th>
+                <th>%change</th>
+                <th>low</th>
+                <th>high</th>
+                <th>volume</th>
+            </tr>
+     
     ))
 
     return (
-        <div className="container-md" style={ cardContainerLayout }>
-            { stockCards }
-        </div>
+        <>
+        <Container className='m-2'>
+            <h1>Watch List</h1>
+
+            <Table striped bordered hover>
+                <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Name</th>
+                    <th>Price purchased</th>
+                    <th>Sparkline</th>
+                    <th>last</th>
+                    <th>change</th>
+                    <th>%change</th>
+                    <th>low</th>
+                    <th>high</th>
+                    <th>volume</th>
+                </tr>
+                </thead>
+                <tbody>
+                    { stockCards }
+                </tbody>
+            </Table>
+        </Container>
+      </>
     )
 }
 

@@ -11,8 +11,8 @@ import { createStockSuccess, createStockFailure } from '../shared/AutoDismissAle
 // to redirect to a different component(page) we can use a hook from react-router
 import { useNavigate } from 'react-router-dom'
 import { Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
 import StockForm from '../shared/StockForm'
+import StockCreateModal from './StockCreateModal'
 
 const cardContainerLayout = {
     display: 'flex',
@@ -36,41 +36,17 @@ const StockCreate = (props) => {
     const [ticker, setTicker] = useState('')
     const [tickers, setTickers] = useState([])
 
-    const onChange = (e) => {
-        // e is the placeholder for event
-        e.persist()
-
-        setStock(prevStock => {
-            const updatedName = e.target.name
-            let updatedValue = e.target.value
-
-            // the above is enough for string inputs
-            // but we have a number and a boolean to handle
-            if (e.target.type === 'number') {
-                // if the target type is a number - updateValue must be a number
-                updatedValue = parseInt(e.target.value)
-            }
-            
-            // build the stock object, grab the attribute name from the field and assign it the respective value.
-            const updatedStock = { [updatedName] : updatedValue }
-
-            // keep all the old stock stuff and add the new stock stuff(each keypress)
-            return {
-                ...prevStock, ...updatedStock
-            }
-        })
-    }
-
     const onSubmit = (e) => {
         // we're still using a form - the default behavior of a form is to refresh the page
         e.preventDefault()
-
-        // we're making an api call here
-        // so we want to handle the promise with then and catch
+    
         // first we want to send our create request
         createStock(user, stock)
             // then navigate the user to the show page if successful
-            .then(res => { navigate(`/stocks/${res.data.stock._id}`)})
+            .then(res => { 
+                console.log('new stock created',stock)
+                navigate(`/stocks`)
+            })
             // send a success message
             .then(() => {
                 msgAlert({
@@ -87,7 +63,7 @@ const StockCreate = (props) => {
                     variant: 'danger'
                 })
             })
-    }
+      }
 
     const onSubmit2 = (e) => {
         e.preventDefault()
@@ -97,10 +73,9 @@ const StockCreate = (props) => {
             method: 'GET',
             maxBodyLength: Infinity,
             headers: { }
-          })
+            })
             .then((response) => {
-                // console.log(JSON.stringify(response.results));
-                setTickers([response.results])
+                setTickers(response.data.results)
                 // return response
             })
             .catch((error) => {
@@ -118,14 +93,17 @@ const StockCreate = (props) => {
     }
 
     const tickerCards = tickers.map(ticker => (
-        <Card key={ ticker.ticker } style={{ width: '30%', margin: 5 }}>
+        <Card key={ ticker.ticker } style={{ width: '60%', margin: 5 }}>
             <Card.Header>{ ticker.name }</Card.Header>
             <Card.Body>
                 <Card.Text>
-                    <Link to={`/tickers/`} className='btn btn-info'>
-                        View { ticker.ticker }
-                    </Link>
+                    <small>Ticker: { ticker.ticker }</small>
                 </Card.Text>
+                <StockCreateModal 
+                    stock={stock}
+                    onSubmit={onSubmit}
+                    setStock={setStock} 
+                    ticker={ticker.ticker} />
             </Card.Body>
         </Card>
     ))
@@ -136,15 +114,15 @@ const StockCreate = (props) => {
             <StockForm 
                 stock={stock}
                 ticker={ticker}
-                handleChange={onChange}
+                onSubmit = {onSubmit}
                 handleChange2={onChange2}
-                handleSubmit={onSubmit}
                 handleSubmit2={onSubmit2}
                 heading="Add a new Stock!"
             />
             <div className="container-md" style={ cardContainerLayout }>
                 { tickerCards }
             </div>
+            
         </>
     )
 }
