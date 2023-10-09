@@ -1,5 +1,5 @@
 // import React, { Component, Fragment } from 'react'
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 
@@ -19,15 +19,32 @@ import StockDelete from './components/stocks/StockDelete'
 
 const App = () => {
 
-  const [user, setUser] = useState(null)
-  const [msgAlerts, setMsgAlerts] = useState([])
+	const [user, setUser] = useState(null)
+	const [msgAlerts, setMsgAlerts] = useState([])
 
-  console.log('user in app', user)
-  console.log('message alerts', msgAlerts)
-  const clearUser = () => {
-    console.log('clear user ran')
-    setUser(null)
-  }
+	console.log('user in app', user)
+	console.log('message alerts', msgAlerts)
+
+  	useEffect(() => { 
+		// access localStorage
+		const loggedInUser = localStorage.getItem('user')
+		// console.log('the loggedInUser', loggedInUser)
+
+		if (loggedInUser) {
+			// we need to parse our JSON string
+			const foundUser = JSON.parse(loggedInUser)
+			// console.log('foundUser', foundUser)
+			// then set the user
+			setUser(foundUser)
+		}
+	}, [])
+
+
+	const clearUser = () => {
+		// console.log('clear user ran')
+		setUser(null)
+		localStorage.removeItem('user')
+	}
 
 	const deleteAlert = (id) => {
 		setMsgAlerts((prevState) => {

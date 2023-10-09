@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { Container, Card} from 'react-bootstrap'
 import LoadingScreen from '../shared/LoadingScreen'
 // we'll need to import an api function to grab an individual stock
@@ -11,8 +11,6 @@ const StockShow = (props) => {
     const [stock, setStock] = useState(null)
     // this is a boolean that we can alter to trigger a page re-render
     const [updated, setUpdated] = useState(false)
-
-    const navigate = useNavigate()
 
     // we need to pull the id from the url
     // localhost:3000/stocks/<stock_id>

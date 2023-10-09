@@ -8,23 +8,11 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 const SignIn = (props) => {
-	// constructor(props) {
-	// 	super(props)
-
-	// 	this.state = {
-	// 		email: '',
-	// 		password: '',
-	// 	}
-	// }
+	
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
     const navigate = useNavigate()
-
-	// handleChange = (event) =>
-	// 	this.setState({
-	// 		[event.target.name]: event.target.value,
-	// 	})
 
 	const onSignIn = (event) => {
 		event.preventDefault()
@@ -34,7 +22,15 @@ const SignIn = (props) => {
         const credentials = {email, password}
 
 		signIn(credentials)
-			.then((res) => setUser(res.data.user))
+			.then((res) => {
+                setUser(res.data.user)
+                const userJSON = JSON.stringify(res.data.user)
+                // [object Object]
+                // to store that JSON string we can call localStorage
+                // localStorage, has the fn 'setItem'
+                // setItem takes two args -> name od the data, value
+                localStorage.setItem('user', userJSON)
+            })
 			.then(() =>
 				msgAlert({
 					heading: 'Sign In Success',
