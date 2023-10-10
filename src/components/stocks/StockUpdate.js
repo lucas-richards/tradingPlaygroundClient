@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useState } from 'react'
 import { Button } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { updateStock} from '../../api/stock'
@@ -8,11 +7,11 @@ import { updateStockSuccess, updateStockFailure} from '../shared/AutoDismissAler
 
 const StockUpdate = (props) => {
 
-    const { stock, user }= props
-    const [updatedStock,setUpdatedStock] = useState(stock)
+    const { stock, stocks, setStocks, user }= props
+    const updatedStocks = [...stocks]
     // to utilize the navigate hook from react-router-dom
     const navigate = useNavigate()
-    console.log('this is updated stock at first',updatedStock)
+    console.log('this is updated stock first',updatedStocks)
 
     const updateValues = () => {
        
@@ -20,7 +19,7 @@ const StockUpdate = (props) => {
             method: 'GET',
             url: 'https://twelve-data1.p.rapidapi.com/time_series',
             params: {
-                symbol: `${updatedStock.symbol}`,
+                symbol: `${stock.symbol}`,
                 interval: '1day',
                 outputsize: '30',
                 format: 'json'
@@ -32,42 +31,68 @@ const StockUpdate = (props) => {
             },
             })
             .then((response) => {
-            console.log(JSON.stringify(response.data.values[0]));
+                console.log(JSON.stringify(response.data.values[0]));
+
+                const indexToUpdate = updatedStocks.findIndex(obj => obj._id === stock._id);
+                if (indexToUpdate !== -1) {
+
+                    axios.request({
+                        url: `https://twelve-data1.p.rapidapi.com/price?symbol=${stock.symbol}&format=json&outputsize=30`,
+                        method: 'GET',
+                        maxBodyLength: Infinity,
+                        headers: { 
+                            'X-RapidAPI-Key': `${process.env.REACT_APP_X_RapidAPI_Key}`, 
+                            'X-RapidAPI-Host': 'twelve-data1.p.rapidapi.com'
+                        },
+                        })
+                        .then((response) => {
+                            console.log('last price successful',JSON.stringify(response.data));
+                            updatedStocks[indexToUpdate].price = response.data.price
+                            
+                        })
+                        .catch((error) => {
+                            console.log(error);
+                        });
+                
+                    updatedStocks[indexToUpdate]._id = stock._id
+                    updatedStocks[indexToUpdate].symbol = stock.symbol
+                    updatedStocks[indexToUpdate].prev_price = response.data.values[1].close
+                    updatedStocks[indexToUpdate].open = response.data.values[0].open
+                    updatedStocks[indexToUpdate].high = response.data.values[0].high
+                    updatedStocks[indexToUpdate].low = response.data.values[0].low
+                    updatedStocks[indexToUpdate].close = response.data.values[0].close
+                    updatedStocks[indexToUpdate].volume = response.data.values[0].volume
             
-            setUpdatedStock({
-                _id: updatedStock._id,
-                symbol: updatedStock.symbol,
-                price: updatedStock.price,
-                open: response.data.values[0].open,
-                high: response.data.values[0].high,
-                low: response.data.values[0].low,
-                close: response.data.values[0].close,
-                volume: response.data.values[0].volume,
-            })
-            console.log(updatedStock)
-            // return response
+                    setStocks(updatedStocks)
+                    console.log('updated stock',updatedStocks[indexToUpdate])
+                } else {
+                    console.log("Object not found in the array.");
+                }
+                
+                
+                updateStock(user, updatedStocks[indexToUpdate])
+                    // then navigate the user to the show page if successful
+                    .then(res => { 
+                        navigate(`/stocks`)
+                    })
+                    // send a success message
+                    // .then(() => {
+                    //     msgAlert({
+                    //         heading: 'Oh Yeah!',
+                    //         message: updateStockSuccess,
+                    //         variant: 'success'
+                    //     })
+                    // })
+                    // if it fails, keep the user on the create page and send a message
+                    .catch((error) => {
+                        console.log(error);
+                    });
         })
         .catch((error) => {
             console.log(error);
         });
 
-        updateStock(user, updatedStock)
-            // then navigate the user to the show page if successful
-            .then(res => { 
-                navigate(`/stocks`)
-            })
-            // send a success message
-            // .then(() => {
-            //     msgAlert({
-            //         heading: 'Oh Yeah!',
-            //         message: updateStockSuccess,
-            //         variant: 'success'
-            //     })
-            // })
-            // if it fails, keep the user on the create page and send a message
-            .catch((error) => {
-                console.log(error);
-            });
+        
     }
 
     

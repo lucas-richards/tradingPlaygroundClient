@@ -60,15 +60,19 @@ const StocksIndex = (props) => {
                 </td>
                 <td>Name</td>
                 <td>{ stock.price }</td>
-                <td>Sparkline</td>
-                <td>last</td>
-                <td>change</td>
-                <td>%change</td>
+                <td>
+                    <img width={100} src='/green.png'></img>
+                </td>
+                <td>{ (stock.price-stock.prev_price).toFixed(2) }</td>
+                <td>{ ((stock.price-stock.prev_price)/stock.price*100).toFixed(2) }%</td>
+                <td>{ stock.prev_price }</td>
                 <td>{ stock.low }</td>
                 <td>{ stock.high }</td>
                 <td>{ stock.volume }</td>
                 <td><StockUpdate 
-                    stock = {stock} 
+                    stock = {stock}
+                    stocks = {stocks}
+                    setStocks = {setStocks}
                     user={user} 
                     />
                 </td>
@@ -87,11 +91,11 @@ const StocksIndex = (props) => {
                     <th>Logo</th>
                     <th>Symbol</th>
                     <th>Name</th>
-                    <th>Price purchased</th>
+                    <th>Last</th>
                     <th>Sparkline</th>
-                    <th>last</th>
                     <th>change</th>
                     <th>%change</th>
+                    <th>prev close</th>
                     <th>low</th>
                     <th>high</th>
                     <th>volume</th>
