@@ -1,9 +1,3 @@
-// stockCreate is going to render a form
-// this form will build a stock object in state
-// the form will submit an axios POST request when submitted
-// we should send a success or failure message
-// on success, redirect to the new stock show page
-// on failure, component should send the message and remain visible
 import axios from 'axios'
 import { useState } from 'react'
 import { createStock } from '../../api/stock'
@@ -13,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { Card } from 'react-bootstrap'
 import StockForm from '../shared/StockForm'
 import StockCreateModal from './StockCreateModal'
+
 
 const cardContainerLayout = {
     display: 'flex',
@@ -69,7 +64,7 @@ const StockCreate = (props) => {
         e.preventDefault()
 
         axios.request({
-            url: `https://api.polygon.io/v3/reference/tickers?search=${ticker}&active=true&apiKey=${process.env.api_twelve_data}`,
+            url: `https://api.polygon.io/v3/reference/tickers?search=${ticker}&active=true&apiKey=${process.env.REACT_APP_api_twelve_data}`,
             method: 'GET',
             maxBodyLength: Infinity,
             headers: { }

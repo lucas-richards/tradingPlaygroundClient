@@ -7,8 +7,6 @@ import StockUpdate from './StockUpdate'
 
 // api function call from our api file
 import { getAllStocks } from '../../api/stock'
-
-// we need our messages from the autodismiss alert messaged file
 import messages from '../shared/AutoDismissAlert/messages'
 
 
@@ -16,7 +14,7 @@ const StocksIndex = (props) => {
     const [stocks, setStocks] = useState(null)
     const [error, setError] = useState(false)
 
-    const { msgAlert } = props
+    const { msgAlert, user } = props
 
     // useEffect takes two arguments
     // first a callback function
@@ -54,21 +52,26 @@ const StocksIndex = (props) => {
     const stockCards = stocks.map(stock => (
         
             <tr key={ stock._id }>
-
+                <td></td>
                 <td>
                     <Link to={`/stocks/${stock._id}`} className=''>
                       { stock.symbol }
                     </Link>
                 </td>
-                <th>Name</th>
+                <td>Name</td>
                 <td>{ stock.price }</td>
-                <th>Sparkline</th>
-                <th>last</th>
-                <th>change</th>
-                <th>%change</th>
-                <th>low</th>
-                <th>high</th>
-                <th>volume</th>
+                <td>Sparkline</td>
+                <td>last</td>
+                <td>change</td>
+                <td>%change</td>
+                <td>{ stock.low }</td>
+                <td>{ stock.high }</td>
+                <td>{ stock.volume }</td>
+                <td><StockUpdate 
+                    stock = {stock} 
+                    user={user} 
+                    />
+                </td>
             </tr>
      
     ))
@@ -81,6 +84,7 @@ const StocksIndex = (props) => {
             <Table striped bordered hover>
                 <thead>
                 <tr>
+                    <th>Logo</th>
                     <th>Symbol</th>
                     <th>Name</th>
                     <th>Price purchased</th>
@@ -91,6 +95,7 @@ const StocksIndex = (props) => {
                     <th>low</th>
                     <th>high</th>
                     <th>volume</th>
+                    <th>last update</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -98,7 +103,7 @@ const StocksIndex = (props) => {
                 </tbody>
             </Table>
         </Container>
-        <StockUpdate />
+        
       </>
     )
 }

@@ -10,6 +10,8 @@ const messages = {
 	createStockFailure: 'Oh no! Something went wrong, please try again',
 	removeStockSuccess: 'Stock Successfully removed!',
 	removeStockFailure: 'Oh no! Something went wrong, please try again',
+	updateStockSuccess: 'Stock Successfully updated!',
+	updateStockFailure: 'Oh no! Something went wrong, please try again',
 }
 
 module.exports = messages
