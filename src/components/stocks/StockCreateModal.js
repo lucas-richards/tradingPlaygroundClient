@@ -1,32 +1,31 @@
-import axios from 'axios'
 import { useState } from 'react';
 import {Button, Modal, Form } from 'react-bootstrap';
+import { getLogo, getLastPrice } from '../../api/other_api'
 
 
 function StockCreateModal(props) {
   const { stock, onSubmit, setStock, ticker} = props
-
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
+  
   const handleShow = () => {
-    axios.request({
-      url: `https://twelve-data1.p.rapidapi.com/price?symbol=${ticker}&format=json&outputsize=30`,
-      method: 'GET',
-      maxBodyLength: Infinity,
-      headers: { 
-          'X-RapidAPI-Key': `${process.env.REACT_APP_X_RapidAPI_Key}`, 
-          'X-RapidAPI-Host': 'twelve-data1.p.rapidapi.com'
-        },
-      })
-      .then((response) => {
-          console.log(JSON.stringify(response.data));
-          
-          setStock({
-              symbol: ticker,
-              price: response.data.price,
-          })
-          // return response
+    getLastPrice(ticker)
+      .then((lastPrice) => {
+
+          getLogo(ticker)
+            .then((logoUrl) => {
+              
+              setStock({
+                symbol: ticker,
+                price: lastPrice,
+                logo:logoUrl
+              })
+            })
+            .catch((error) => {
+              console.error('Error fetching logo:', error);
+            });
+  
       })
       .catch((error) => {
           console.log(error);
@@ -40,8 +39,8 @@ function StockCreateModal(props) {
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        <svg width={30} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg width={30} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+            <path d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </Button>
 

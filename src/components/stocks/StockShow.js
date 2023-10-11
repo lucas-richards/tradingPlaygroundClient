@@ -1,36 +1,43 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Container, Card} from 'react-bootstrap'
+import { Container, Card, Row, Col} from 'react-bootstrap'
 import LoadingScreen from '../shared/LoadingScreen'
 // we'll need to import an api function to grab an individual stock
 import { getOneStock} from '../../api/stock'
 import { showStockFailure} from '../shared/AutoDismissAlert/messages'
-
+import { getHistory } from '../../api/other_api'
+import LineGraph from '../shared/StockGraph'
 
 const StockShow = (props) => {
     const [stock, setStock] = useState(null)
     // this is a boolean that we can alter to trigger a page re-render
     const [updated, setUpdated] = useState(false)
+    const [historyData, setHistoryData] = useState(null)
 
-    // we need to pull the id from the url
-    // localhost:3000/stocks/<stock_id>
-    // to retrieve our id, we can use something from react-router-dom called useParams
-    // this is called id, because that's how it is declared in our Route component in App.js
     const { id } = useParams()
     const { user, msgAlert } = props
 
-    // useEffect takes two arguments
-    // the callback function
-    // the dependency array
-    // the dependency array determines when useEffect gets called
-    // if any piece of state inside the dependency array changes
-    // this triggers the useEffect to run the callback function again
-    // NEVER EVER EVER EVER EVER EVER EVER put a piece of state in the dependency array that gets updated by the useEffect callback function
-    // doing this causes an infinite loop
-    // react will kill your application if this happens
+    
+
     useEffect(() => {
         getOneStock(id)
-            .then(res => setStock(res.data.stock))
+            .then(res => {
+                setStock(res.data.stock)
+
+                console.log(res.data.stock.symbol)
+
+                getHistory(res.data.stock.symbol)
+                    .then(res => { 
+                        setHistoryData(res.values)
+                        
+                    })
+                    
+                    // if it fails, keep the user on the create page and send a message
+                    .catch((error) => {
+                        console.log(error)
+                    });
+
+            })
             .catch(err => {
                 msgAlert({
                     heading: 'Error getting stock',
@@ -40,6 +47,8 @@ const StockShow = (props) => {
             })
     }, [updated])
 
+    console.log('this is history data',historyData)
+
     if(!stock) {
         return <LoadingScreen />
     }
@@ -47,28 +56,42 @@ const StockShow = (props) => {
     return (
         <>
             <Container className='m-2'>
-                <Card>
-                    <Card.Header>{ stock.symbol }</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                            <small>Price: {stock.price}</small><br/>
-                        </Card.Text>
-                    </Card.Body>
-                    <Card.Footer>
-                        {
-                             user && stock.owner._id === user._id
-                            ?
-                            <>
-                                <Link className='btn btn-danger' to='delete-stock'>
-				                    Delete Stock
-			                    </Link>
-                            </>
-                            :
-                            null
-                        }
-                    </Card.Footer>
-                </Card>
+            <Row>
+                <Col md={9}  xs="auto">
+                    <Card>
+                        <Card.Header>{ stock.symbol }</Card.Header>
+                        <Card.Body>
+                            <Card.Text>
+                                <small>Price: {stock.price}</small><br/>
+                                {   
+                                    historyData ?
+                                    <LineGraph data={historyData} />
+                                    :
+                                    null
+                                }
+                            </Card.Text>
+                        </Card.Body>
+                        <Card.Footer>
+                            {
+                                user && stock.owner._id === user._id
+                                ?
+                                <>
+                                    <Link className='btn btn-danger' to='delete-stock'>
+                                        Delete Stock
+                                    </Link>
+                                </>
+                                :
+                                null
+                            }
+                        </Card.Footer>
+                    </Card>
+                </Col>
+                <Col md={3} xs="auto">
+                    <h3>This </h3>
+                </Col>
+            </Row>
             </Container>
+            
             
         </>
     )

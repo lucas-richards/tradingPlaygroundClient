@@ -26,6 +26,7 @@ const StockCreate = (props) => {
     const [stock, setStock] = useState({
         symbol: '',
         price: '',
+        logo:''
     })
 
     const [ticker, setTicker] = useState('')

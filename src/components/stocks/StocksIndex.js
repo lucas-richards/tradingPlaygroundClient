@@ -13,7 +13,6 @@ import messages from '../shared/AutoDismissAlert/messages'
 const StocksIndex = (props) => {
     const [stocks, setStocks] = useState(null)
     const [error, setError] = useState(false)
-
     const { msgAlert, user } = props
 
     // useEffect takes two arguments
@@ -22,7 +21,7 @@ const StocksIndex = (props) => {
     useEffect(() => {
         getAllStocks()
             .then(res => {
-                setStocks(res.data.stocks)
+                setStocks(res.data.stocks.filter(stock => stock.owner._id === user._id))
             })
             .catch(err => {
                 msgAlert({
@@ -32,7 +31,7 @@ const StocksIndex = (props) => {
                 })
                 setError(true)
             })
-    }, [msgAlert])
+    }, [ ])
 
     // we need to account for multiple potential states of our data
     // if we have an error
@@ -52,16 +51,17 @@ const StocksIndex = (props) => {
     const stockCards = stocks.map(stock => (
         
             <tr key={ stock._id }>
-                <td></td>
+                <td>
+                    <img width={40} src={ stock.logo } alt='logo'/>
+                </td>
                 <td>
                     <Link to={`/stocks/${stock._id}`} className=''>
                       { stock.symbol }
                     </Link>
                 </td>
-                <td>Name</td>
                 <td>{ stock.price }</td>
                 <td>
-                    <img width={100} src='/green.png'></img>
+                    <img width={100} src='/green.png' alt='sparkline'></img>
                 </td>
                 <td>{ (stock.price-stock.prev_price).toFixed(2) }</td>
                 <td>{ ((stock.price-stock.prev_price)/stock.price*100).toFixed(2) }%</td>
@@ -74,6 +74,7 @@ const StocksIndex = (props) => {
                     stocks = {stocks}
                     setStocks = {setStocks}
                     user={user} 
+                    msgAlert= {msgAlert}
                     />
                 </td>
             </tr>
@@ -90,7 +91,6 @@ const StocksIndex = (props) => {
                 <tr>
                     <th>Logo</th>
                     <th>Symbol</th>
-                    <th>Name</th>
                     <th>Last</th>
                     <th>Sparkline</th>
                     <th>change</th>
