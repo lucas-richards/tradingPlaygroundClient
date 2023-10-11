@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Container, Card, Row, Col} from 'react-bootstrap'
+import { Card, Row, Col} from 'react-bootstrap'
 import LoadingScreen from '../shared/LoadingScreen'
 // we'll need to import an api function to grab an individual stock
 import { getOneStock} from '../../api/stock'
 import { showStockFailure} from '../shared/AutoDismissAlert/messages'
 import { getHistory } from '../../api/other_api'
 import LineGraph from '../shared/StockGraph'
+import TransactionForm from '../shared/TransactionForm'
 
 const StockShow = (props) => {
     const [stock, setStock] = useState(null)
-    // this is a boolean that we can alter to trigger a page re-render
     const [updated, setUpdated] = useState(false)
     const [historyData, setHistoryData] = useState(null)
 
@@ -23,8 +23,6 @@ const StockShow = (props) => {
         getOneStock(id)
             .then(res => {
                 setStock(res.data.stock)
-
-                console.log(res.data.stock.symbol)
 
                 getHistory(res.data.stock.symbol)
                     .then(res => { 
@@ -54,15 +52,15 @@ const StockShow = (props) => {
     }
 
     return (
-        <>
-            <Container className='m-2'>
-            <Row>
-                <Col md={9}  xs="auto">
+        <div className='m-2'>
+            
+            <Row  >
+                <Col md={8}  xs="auto">
                     <Card>
                         <Card.Header>{ stock.symbol }</Card.Header>
                         <Card.Body>
                             <Card.Text>
-                                <small>Price: {stock.price}</small><br/>
+                                
                                 {   
                                     historyData ?
                                     <LineGraph data={historyData} />
@@ -86,14 +84,38 @@ const StockShow = (props) => {
                         </Card.Footer>
                     </Card>
                 </Col>
-                <Col md={3} xs="auto">
-                    <h3>This </h3>
+                <Col md={4} xs="auto">
+                    <Card>
+                        <Card.Header>Transaction</Card.Header>
+                        <Card.Body>
+                            <Card.Text>
+                                <span className={`fs-4 ${stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}`}>
+                                    {stock.price.toFixed(2)}
+                                </span>
+                                <small className={`m-1 ${stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}`}>
+                                    {(stock.price - stock.prev_price).toFixed(2)}
+                                </small>
+                                <small className={stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}>
+                                    {((stock.price - stock.prev_price) / stock.price * 100).toFixed(2)}%
+                                </small>
+                                <br />
+                                <hr />
+                                <TransactionForm 
+                                    stock={ stock }
+                                    user={ user } 
+                                    msgAlert = {msgAlert}/>
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
-            </Container>
+            <Row>
+                <Col md={8}  xs="auto">
+                    {/* <Counter /> */}
+                </Col>
+            </Row>
             
-            
-        </>
+        </div>
     )
 }
 

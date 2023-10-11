@@ -12,10 +12,11 @@ import SignUp from './components/auth/SignUp'
 import SignIn from './components/auth/SignIn'
 import SignOut from './components/auth/SignOut'
 import ChangePassword from './components/auth/ChangePassword'
-import StocksIndex from './components/stocks/StocksIndex'
+import StockIndex from './components/stocks/StockIndex'
 import StockCreate from './components/stocks/StockCreate'
 import StockShow from './components/stocks/StockShow'
 import StockDelete from './components/stocks/StockDelete'
+import Wallet from './components/Wallet'
 
 const App = () => {
 
@@ -95,7 +96,7 @@ const App = () => {
 					/>
 					<Route
 						path='/stocks'
-						element={<StocksIndex user={user} msgAlert={msgAlert} />}
+						element={<StockIndex user={user} msgAlert={msgAlert} />}
 					/>
 					<Route
 						path='/stocks/:id'
@@ -110,6 +111,10 @@ const App = () => {
 						<RequireAuth user={user}>
 							<StockDelete msgAlert={msgAlert} user={user} />
 						</RequireAuth>}
+					/>
+					<Route
+						path='/wallet'
+						element={<Wallet user={user} msgAlert={msgAlert} />}
 					/>
 				</Routes>
 				{msgAlerts.map((msgAlert) => (

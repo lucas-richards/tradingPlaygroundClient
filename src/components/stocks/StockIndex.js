@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react'
 import { Table, Container } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
@@ -10,14 +9,11 @@ import { getAllStocks } from '../../api/stock'
 import messages from '../shared/AutoDismissAlert/messages'
 
 
-const StocksIndex = (props) => {
+const StockIndex = (props) => {
     const [stocks, setStocks] = useState(null)
     const [error, setError] = useState(false)
     const { msgAlert, user } = props
 
-    // useEffect takes two arguments
-    // first a callback function
-    // second a 'dependency array'
     useEffect(() => {
         getAllStocks()
             .then(res => {
@@ -31,7 +27,7 @@ const StocksIndex = (props) => {
                 })
                 setError(true)
             })
-    }, [ ])
+    }, [])
 
     // we need to account for multiple potential states of our data
     // if we have an error
@@ -113,4 +109,4 @@ const StocksIndex = (props) => {
 }
 
 // export our component
-export default StocksIndex
+export default StockIndex

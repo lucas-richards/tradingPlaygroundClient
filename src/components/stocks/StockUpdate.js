@@ -30,7 +30,32 @@ const StockUpdate = (props) => {
                             updatedStocks[indexToUpdate].close = data.values[0].close
                             updatedStocks[indexToUpdate].volume = data.values[0].volume
                             setStocks(updatedStocks)
+                            return updatedStocks[indexToUpdate]
 
+                        })
+                        .then((uSData)=>{
+                            updateStock(user, uSData)
+                                // then navigate the user to the show page if successful
+                                .then(res => { 
+                                    navigate(`/stocks`)
+                                })
+                                // send a success message
+                                .then(() => {
+                                    msgAlert({
+                                        heading: 'Oh Yeah!',
+                                        message: updateStockSuccess,
+                                        variant: 'success'
+                                    })
+                                })
+                                // if it fails, keep the user on the create page and send a message
+                                .catch((error) => {
+                                    msgAlert({
+                                        heading: 'Failed!',
+                                        message: updateStockFailure,
+                                        variant: 'danger'
+                                    })
+                                });
+                            
                         })
                         .catch((error) => {
                             console.log(error);
@@ -41,27 +66,7 @@ const StockUpdate = (props) => {
                 }
                 
                 
-                updateStock(user, updatedStocks[indexToUpdate])
-                    // then navigate the user to the show page if successful
-                    .then(res => { 
-                        navigate(`/stocks`)
-                    })
-                    // send a success message
-                    .then(() => {
-                        msgAlert({
-                            heading: 'Oh Yeah!',
-                            message: updateStockSuccess,
-                            variant: 'success'
-                        })
-                    })
-                    // if it fails, keep the user on the create page and send a message
-                    .catch((error) => {
-                        msgAlert({
-                            heading: 'Failed!',
-                            message: updateStockFailure,
-                            variant: 'danger'
-                        })
-                    });
+                
             })
         .catch((error) => {
             console.log(error);
