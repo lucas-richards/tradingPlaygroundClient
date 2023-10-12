@@ -5,7 +5,7 @@ import { createCommentSuccess,createCommentFailure } from '../shared/AutoDismiss
 
 function CommentShow(props){
 
-    const {transaction, user, msgAlert} = props
+    const {transaction, user, msgAlert, handleClose, triggerRefresh} = props
     const [comment, setComment] = useState({
         content:''
     })
@@ -36,6 +36,7 @@ function CommentShow(props){
             .then(res => { 
                 console.log('new comment created',comment)
             })
+            .then(() => triggerRefresh())
             // send a success message
             .then(() => {
                 msgAlert({
@@ -55,7 +56,6 @@ function CommentShow(props){
 
     }
 
-    
 
     return(
         <Card className='m-2'>
@@ -68,10 +68,11 @@ function CommentShow(props){
                     name="content"
                     value={ comment.content }
                     onChange={onChange}
+                    
                 />
                 </Form.Group>
                 
-                <Button className='m-3' variant="primary" type="submit">
+                <Button className='m-3' variant="primary" type="submit" onClick={handleClose}>
                 Save 
                 </Button>
             

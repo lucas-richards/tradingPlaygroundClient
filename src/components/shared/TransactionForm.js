@@ -57,7 +57,7 @@ const TransactionForm = (props) => {
             // then navigate the user to the show page if successful
             .then(res => { 
                 console.log('new transaction created',transaction)
-                navigate(`/transactions`)
+                navigate(`/wallet`)
             })
             // send a success message
             .then(() => {

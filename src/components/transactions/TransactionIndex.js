@@ -54,7 +54,7 @@ const TransactionsIndex = (props) => {
             <Card.Body>
                     <small >Tran#: { tran._id }</small>
                     <CommentIndex 
-                        transaction={tran} 
+                        transactionId={tran._id}
                         user={user}
                         msgAlert={msgAlert}
                     />

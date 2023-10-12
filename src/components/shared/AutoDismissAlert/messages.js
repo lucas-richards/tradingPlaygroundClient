@@ -16,6 +16,8 @@ const messages = {
 	removeCommentFailure: 'Oh no! Something went wrong, please try again',
 	createCommentSuccess: 'Great! A Stock was added to your list!',
 	createCommentFailure: 'Oh no! Something went wrong, please try again',
+	showCommentSuccess: 'Great! A Stock was added to your list!',
+	showCommentFailure: 'Oh no! Something went wrong, please try again',
 }
 
 module.exports = messages
