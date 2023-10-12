@@ -50,20 +50,20 @@ const TransactionsIndex = (props) => {
 
     const transactionCards = transactions.map(tran => (
         
-        <Card key={ tran.id } style={{ width: '100%', margin: 5 }}>
-            
+        <Card key={ tran._id } style={{ width: '100%', margin: 5 }}>
             <Card.Body>
-                <Card.Text>
                     <small >Tran#: { tran._id }</small>
-                    <CommentIndex />
+                    <CommentIndex 
+                        transaction={tran} 
+                        user={user}
+                        msgAlert={msgAlert}
+                    />
                     <hr />
-                    <h6>Symbol: { tran.symbol }</h6>
-                    <h6>Type: { tran.buy?'Buy':'Sell' }</h6>
-                    <h6>Price: ${ tran.price }</h6>
-                    <h6>Quantity: { tran.quantity}</h6>
-                    <h6>Total: ${ (tran.price *tran.quantity).toFixed(2)}</h6>
-                    
-                </Card.Text>
+                    <p>Symbol: { tran.symbol }</p>
+                    <p>Type: { tran.buy?'Buy':'Sell' }</p>
+                    <p>Price: ${ tran.price }</p>
+                    <p>Quantity: { tran.quantity}</p>
+                    <p>Total: ${ (tran.price *tran.quantity).toFixed(2)}</p>
             </Card.Body>
         </Card>
      

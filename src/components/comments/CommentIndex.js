@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {Button, Modal, Container } from 'react-bootstrap';
 import CommentShow from './CommentShow'
+import CommentForm from './CommentForm'
 
 
 function CommentIndex(props) {
@@ -8,26 +9,28 @@ function CommentIndex(props) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
+
+  const handleShow = () => {
+    setShow(true)
+  };
   
   let commentCards
-  const handleShow = () => {
-    if (transaction.comments.length > 0) {
-        commentCards = transaction.comments.map(comment => (
-          <CommentShow 
-              key={comment.id}
-              comment={comment}
-              msgAlert={msgAlert}
-              user={user}
-              transaction={transaction}
-          />
-      ))
+  
+  if (transaction.comments.length > 0) {
+    commentCards = transaction.comments.map((comment,idx) => (
+
+      <CommentShow 
+          idx={idx}
+          comment={comment}
+          msgAlert={msgAlert}
+          user={user}
+          transaction={transaction}
+      />
+
+    ))
     } else {
         commentCards = <p>No comments yet</p>
     }
-    
-
-    setShow(true)
-  };
 
   
 
@@ -41,11 +44,16 @@ function CommentIndex(props) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Current Stock Information</Modal.Title>
+          <Modal.Title>{transaction.symbol}-${(transaction.price*transaction.quantity).toFixed(2)}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
             <Container className='m-2'>
                 {commentCards}
+                <CommentForm
+                  transaction={ transaction }
+                  user={ user }
+                  msgAlert={ msgAlert }
+                />
             </Container>
           
         </Modal.Body>
