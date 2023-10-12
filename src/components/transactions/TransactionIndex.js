@@ -20,7 +20,6 @@ const TransactionsIndex = (props) => {
     useEffect(() => {
         getAllTransactions()
             .then(res => {
-                console.log(res)
                 setTransactions(res.data.transactions.filter(transaction => transaction.owner._id === user._id))
             })
             .catch(err => {
@@ -59,10 +58,9 @@ const TransactionsIndex = (props) => {
                         msgAlert={msgAlert}
                     />
                     <hr />
-                    <p>Symbol: { tran.symbol }</p>
-                    <p>Type: { tran.buy?'Buy':'Sell' }</p>
-                    <p>Price: ${ tran.price }</p>
-                    <p>Quantity: { tran.quantity}</p>
+                    <small >Date: { tran.createdAt }</small><br />
+                    <p>Description: { tran.buy?'Bought':'Sold' } { tran.quantity} stocks of { tran.symbol } at ${ tran.price }/stock</p>
+                    
                     <p>Total: ${ (tran.price *tran.quantity).toFixed(2)}</p>
             </Card.Body>
         </Card>

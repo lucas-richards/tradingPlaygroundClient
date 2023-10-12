@@ -21,10 +21,10 @@ const CommentIndex = (props) => {
     let commentCards
     
     useEffect(()=>{
-      console.log('useeffect was hit')
+      
         getOneTransaction(user,transactionId)
             .then(res => {
-              console.log('response',res.data.transaction)
+              
               setTransaction(res.data.transaction)})
             .catch(err => {
               msgAlert({
