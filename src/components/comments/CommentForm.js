@@ -5,7 +5,7 @@ import { createCommentSuccess,createCommentFailure } from '../shared/AutoDismiss
 
 function CommentShow(props){
 
-    const {transaction, user, msgAlert, handleClose, triggerRefresh} = props
+    const {transaction, user, msgAlert, triggerRefresh} = props
     const [comment, setComment] = useState({
         content:''
     })
@@ -35,6 +35,9 @@ function CommentShow(props){
             // then navigate the user to the show page if successful
             .then(res => { 
                 console.log('new comment created',comment)
+                setComment({
+                    content:''
+                })
             })
             .then(() => triggerRefresh())
             // send a success message
@@ -72,7 +75,7 @@ function CommentShow(props){
                 />
                 </Form.Group>
                 
-                <Button className='m-3' variant="primary" type="submit" onClick={handleClose}>
+                <Button className='m-3' variant="primary" type="submit">
                 Save 
                 </Button>
             

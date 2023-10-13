@@ -1,12 +1,17 @@
 import { Form, Button, Container } from 'react-bootstrap'
 import { createTransaction } from '../../api/transaction'
-import { useState } from 'react'
+import { updateAccount } from '../../api/account'
+import { getAllAccounts } from '../../api/account'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createTransactionSuccess, createTransactionFailure } from '../shared/AutoDismissAlert/messages'
+import CreateAccount from '../accounts/CreateAccount'
+import { getQtyInPortfolio } from './helperFunc/helperFunc'
 
 const TransactionForm = (props) => {
     
     const { stock, user, msgAlert } = props
+    const [account, setAccount] = useState(null)
     const [transaction, setTransaction] = useState({
         symbol: stock.symbol,
         buy: true,
@@ -15,6 +20,18 @@ const TransactionForm = (props) => {
     })
     const navigate = useNavigate()
     console.log('transaction',transaction)
+
+    useEffect(()=>{
+        getAllAccounts(user._id)
+			.then(res =>{
+				if(res.data.accounts.length>0)
+				setAccount(res.data.accounts[0])
+				console.log('account found',account)
+			})
+			.catch(
+				console.log('Account was not found')
+			)
+    },[])
 
     const onChange = (e) => {
         // e is the placeholder for event
@@ -51,13 +68,56 @@ const TransactionForm = (props) => {
     const onSubmit = (e) => {
         // we're still using a form - the default behavior of a form is to refresh the page
         e.preventDefault()
-    
+
+        //Not enough money in the account to buy stocks
+        const total = transaction.price*transaction.quantity
+        if(transaction.buy){
+            if(account.savings < total){
+                return (
+                    msgAlert({
+                        heading: 'Oh no, you dont have enough money in your account!',
+                        variant: 'danger'
+                    })
+                )
+        } 
+        //Not enough stocks in the portfolio to sell
+        }else if(!transaction.buy){
+            const symbolTran = getQtyInPortfolio(user, transaction.symbol)
+            console.log('symbolTran',symbolTran)
+            console.log('transaction.quantity',transaction.quantity)
+            if (symbolTran < transaction.quantity){
+                return (
+                    msgAlert({
+                        heading: 'Oh no, you dont have enough stocks to sell!',
+                        variant: 'danger'
+                    })
+                )
+            }
+                
+        } 
         // first we want to send our create request
         createTransaction(user, transaction)
             // then navigate the user to the show page if successful
             .then(res => { 
                 console.log('new transaction created',transaction)
-                navigate(`/wallet`)
+                
+                if (transaction.buy){
+                    account.savings = account.savings - total
+                    account.investments = account.investments + total
+                } else {
+                    account.savings = account.savings + total
+                    account.investments = account.investments - total
+                }
+                console.log('updated account',account)
+                updateAccount(user, account)
+                    .then(res => {
+                        console.log('account was adjusted successfully')
+                        navigate(`/wallet`)
+                    })
+                    .catch(err=>{
+                        console('issue updating account')
+                    })
+                
             })
             // send a success message
             .then(() => {
@@ -76,6 +136,15 @@ const TransactionForm = (props) => {
                 })
             })
       }
+    
+      
+
+    if(!account){
+        return <CreateAccount 
+                    user={user}
+                    setAccount={setAccount}
+                />
+    }
 
     return (
         <Container className="justify-content-center">

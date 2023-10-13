@@ -11,7 +11,6 @@ import TransactionForm from '../shared/TransactionForm'
 
 const StockShow = (props) => {
     const [stock, setStock] = useState(null)
-    const [updated, setUpdated] = useState(false)
     const [historyData, setHistoryData] = useState(null)
 
     const { id } = useParams()
@@ -43,9 +42,7 @@ const StockShow = (props) => {
                     variant: 'danger'
                 })
             })
-    }, [updated])
-
-    console.log('this is history data',historyData)
+    }, [])
 
     if(!stock) {
         return <LoadingScreen />
@@ -59,15 +56,12 @@ const StockShow = (props) => {
                     <Card>
                         <Card.Header>{ stock.symbol }</Card.Header>
                         <Card.Body>
-                            <Card.Text>
-                                
-                                {   
-                                    historyData ?
-                                    <LineGraph data={historyData} />
-                                    :
-                                    null
-                                }
-                            </Card.Text>
+                            {   
+                                historyData ?
+                                <LineGraph data={historyData} />
+                                :
+                                <LoadingScreen />
+                            }
                         </Card.Body>
                         <Card.Footer>
                             {
@@ -88,30 +82,28 @@ const StockShow = (props) => {
                     <Card>
                         <Card.Header>Transaction</Card.Header>
                         <Card.Body>
-                            <Card.Text>
-                                <span className={`fs-4 ${stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}`}>
-                                    {stock.price.toFixed(2)}
-                                </span>
-                                <small className={`m-1 ${stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}`}>
-                                    {(stock.price - stock.prev_price).toFixed(2)}
-                                </small>
-                                <small className={stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}>
-                                    {((stock.price - stock.prev_price) / stock.price * 100).toFixed(2)}%
-                                </small>
-                                <br />
-                                <hr />
-                                <TransactionForm 
-                                    stock={ stock }
-                                    user={ user } 
-                                    msgAlert = {msgAlert}/>
-                            </Card.Text>
+                            <span className={`fs-4 ${stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}`}>
+                                {stock.price.toFixed(2)}
+                            </span>
+                            <small className={`m-1 ${stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}`}>
+                                {(stock.price - stock.prev_price).toFixed(2)}
+                            </small>
+                            <small className={stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}>
+                                {((stock.price - stock.prev_price) / stock.price * 100).toFixed(2)}%
+                            </small>
+                            <br />
+                            <hr />
+                            <TransactionForm 
+                                stock={ stock }
+                                user={ user } 
+                                msgAlert = {msgAlert}/>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
             <Row>
                 <Col md={8}  xs="auto">
-                    {/* <Counter /> */}
+                    Another column for news
                 </Col>
             </Row>
             

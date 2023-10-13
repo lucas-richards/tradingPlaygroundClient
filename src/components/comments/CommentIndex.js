@@ -53,7 +53,6 @@ const CommentIndex = (props) => {
               msgAlert={msgAlert}
               user={user}
               transaction={transaction}
-              triggerRefresh={() => setUpdated(prev => !prev)}
               handleClose={handleClose}
           />
         ))
@@ -94,7 +93,7 @@ const CommentIndex = (props) => {
                     transaction={ transaction }
                     user={ user }
                     msgAlert={ msgAlert }
-                    handleClose={handleClose}
+                    triggerRefresh={() => setUpdated(prev => !prev)}
                   />
 
               </Container>

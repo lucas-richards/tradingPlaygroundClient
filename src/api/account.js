@@ -13,14 +13,13 @@ export const getOneAccount = (id) => {
 }
 
 // CREATE -> Add account
-export const createAccount = (user, newAccount) => {
+export const createAccount = (user) => {
     return axios({
         url: `${apiUrl}/accounts`,
         method: 'POST',
         headers: {
             Authorization: `Token token=${user.token}`
-        },
-        data: { account: newAccount }
+        }
     })
 }
 // UPDATE -> Change account

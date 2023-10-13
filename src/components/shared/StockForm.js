@@ -14,7 +14,7 @@ const StockForm = (props) => {
 
             <h3>Search Ticker</h3>
 
-            <Form onSubmit={handleSubmit2} inline>
+            <Form onSubmit={handleSubmit2} >
                 <Row>
                 <Col xs="auto">
                     <Form.Control
