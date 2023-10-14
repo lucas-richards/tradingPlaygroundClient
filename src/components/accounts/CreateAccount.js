@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap'
 
 const CreateAccount = (props)=> {
 
-    const {user, setAccount} = props
+    const {user, setAccount, msgAlert} = props
 
     const handleClick = ()=>{
 		createAccount(user)
@@ -12,7 +12,10 @@ const CreateAccount = (props)=> {
 				setAccount(res.data.account)
 			})
 			.catch(err =>{
-				console.log('error creating account',err)
+				msgAlert({
+                    heading: 'Account Created with extra cash 😎!',
+                    variant: 'success'
+                })
 			})
 	}
 

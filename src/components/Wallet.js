@@ -45,8 +45,8 @@ const Wallet = (props) => {
 						<Col>
 						{account?
 							<div>
-								<h4>Savings: ${account.savings}</h4>
-								<h4>Investments: ${account.investments}</h4>
+								<h4>Savings: ${account.savings.toFixed(2)}</h4>
+								<h4>Investments: ${account.investments.toFixed(2)}</h4>
 							</div>
 							
 							:

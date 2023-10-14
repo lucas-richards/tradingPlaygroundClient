@@ -6,11 +6,11 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { createTransactionSuccess, createTransactionFailure } from '../shared/AutoDismissAlert/messages'
 import CreateAccount from '../accounts/CreateAccount'
-import { getQtyInPortfolio } from './helperFunc/helperFunc'
 
 const TransactionForm = (props) => {
     
-    const { stock, user, msgAlert } = props
+    const { stock, stockQty, user, msgAlert } = props
+    
     const [account, setAccount] = useState(null)
     const [transaction, setTransaction] = useState({
         symbol: stock.symbol,
@@ -31,6 +31,7 @@ const TransactionForm = (props) => {
 			.catch(
 				console.log('Account was not found')
 			)
+        
     },[])
 
     const onChange = (e) => {
@@ -75,20 +76,17 @@ const TransactionForm = (props) => {
             if(account.savings < total){
                 return (
                     msgAlert({
-                        heading: 'Oh no, you dont have enough money in your account!',
+                        heading: `Oh no, you dont have enough money in your account. You have $${(account.savings).toFixed(2)}`,
                         variant: 'danger'
                     })
                 )
         } 
         //Not enough stocks in the portfolio to sell
         }else if(!transaction.buy){
-            const symbolTran = getQtyInPortfolio(user, transaction.symbol)
-            console.log('symbolTran',symbolTran)
-            console.log('transaction.quantity',transaction.quantity)
-            if (symbolTran < transaction.quantity){
+            if (stockQty < transaction.quantity){
                 return (
                     msgAlert({
-                        heading: 'Oh no, you dont have enough stocks to sell!',
+                        heading: `Oh no, you dont have enough stocks to sell!  You have ${stockQty} stocks`,
                         variant: 'danger'
                     })
                 )
@@ -143,6 +141,7 @@ const TransactionForm = (props) => {
         return <CreateAccount 
                     user={user}
                     setAccount={setAccount}
+                    msgAlert = {msgAlert}
                 />
     }
 

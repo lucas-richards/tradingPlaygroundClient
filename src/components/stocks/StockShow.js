@@ -12,12 +12,11 @@ import TransactionForm from '../shared/TransactionForm'
 const StockShow = (props) => {
     const [stock, setStock] = useState(null)
     const [historyData, setHistoryData] = useState(null)
-
     const { id } = useParams()
-    const { user, msgAlert } = props
-
+    const { user, msgAlert, transactions } = props
+    const [ownerTran, setOwnerTran] = useState(null)
     
-
+    let stockQty
     useEffect(() => {
         getOneStock(id)
             .then(res => {
@@ -27,6 +26,7 @@ const StockShow = (props) => {
                     .then(res => { 
                         setHistoryData(res.values)
                         
+
                     })
                     
                     // if it fails, keep the user on the create page and send a message
@@ -42,7 +42,28 @@ const StockShow = (props) => {
                     variant: 'danger'
                 })
             })
+
+        
+            
     }, [])
+
+    if(transactions && stock){
+        setOwnerTran(transactions.filter(transaction => transaction.owner._id === user._id && transaction.symbol === stock.symbol))
+        console.log('these are all the transactions',ownerTran)
+        const countStocks = ownerTran.reduce((count,obj)=>{
+            if (obj.buy === true) {
+                count.buy++;
+            } else {
+                count.sell++;
+            }
+            return count;
+        },{ buy: 0, sell: 0 })
+        console.log('this is countstocks',countStocks)
+        stockQty = countStocks.buy - countStocks.sell
+        console.log('stockQty',stockQty)
+    }
+
+    
 
     if(!stock) {
         return <LoadingScreen />
@@ -80,7 +101,8 @@ const StockShow = (props) => {
                 </Col>
                 <Col md={4} xs="auto">
                     <Card>
-                        <Card.Header>Transaction</Card.Header>
+                        <Card.Header><h4>Transaction</h4> {stockQty? <small>{`Portfolio quantity: ${stockQty} `}</small>:null} </Card.Header>
+                        
                         <Card.Body>
                             <span className={`fs-4 ${stock.price - stock.prev_price >= 0 ? 'text-success' : 'text-danger'}`}>
                                 {stock.price.toFixed(2)}
@@ -95,6 +117,7 @@ const StockShow = (props) => {
                             <hr />
                             <TransactionForm 
                                 stock={ stock }
+                                stockQty={ stockQty }
                                 user={ user } 
                                 msgAlert = {msgAlert}/>
                         </Card.Body>

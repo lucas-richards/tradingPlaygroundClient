@@ -2,6 +2,7 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
+import { getAllTransactions } from "./api/transaction"
 
 // import AuthenticatedRoute from './components/shared/AuthenticatedRoute'
 import AutoDismissAlert from './components/shared/AutoDismissAlert/AutoDismissAlert'
@@ -21,6 +22,7 @@ import Wallet from './components/Wallet'
 const App = () => {
 
 	const [user, setUser] = useState(null)
+	const [transactions, setTransactions] = useState(null)
 	const [msgAlerts, setMsgAlerts] = useState([])
 
   	useEffect(() => { 
@@ -35,6 +37,14 @@ const App = () => {
 			// then set the user
 			setUser(foundUser)
 		}
+		getAllTransactions()
+            .then(res => {
+                setTransactions(res.data.transactions)
+            })
+            .catch(err => {
+                console.log('error getting transactions')
+            })
+
 	}, [])
 
 
@@ -102,7 +112,10 @@ const App = () => {
 						path='/stocks/:id'
 						element={
 						<RequireAuth user={user}>
-							<StockShow msgAlert={msgAlert} user={user} />
+							<StockShow 
+								msgAlert={msgAlert} 
+								user={user}
+								transactions={transactions} />
 						</RequireAuth>}
 					/>
 					<Route
@@ -114,7 +127,11 @@ const App = () => {
 					/>
 					<Route
 						path='/wallet'
-						element={<Wallet user={user} msgAlert={msgAlert} />}
+						element={<Wallet 
+									user={user} 
+									msgAlert={msgAlert} 
+									transactions={transactions}
+								/>}
 					/>
 				</Routes>
 				{msgAlerts.map((msgAlert) => (
