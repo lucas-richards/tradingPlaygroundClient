@@ -11,6 +11,7 @@ import messages from '../shared/AutoDismissAlert/messages'
 
 const StockIndex = (props) => {
     const [stocks, setStocks] = useState(null)
+    
     const [error, setError] = useState(false)
     const { msgAlert, user } = props
 
@@ -27,6 +28,7 @@ const StockIndex = (props) => {
                 })
                 setError(true)
             })
+
     }, [])
 
     // we need to account for multiple potential states of our data
@@ -45,7 +47,7 @@ const StockIndex = (props) => {
     
 
     const stockCards = stocks.map(stock => (
-        
+            
             <tr key={ stock._id }>
                 <td>
                     <img width={40} src={ stock.logo } alt='logo'/>
