@@ -1,9 +1,5 @@
-import { useState, useEffect } from 'react'
 import { Card } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
-import { getAllTransactions } from '../../api/transaction'
 import LoadingScreen from '../shared/LoadingScreen'
-import messages from '../shared/AutoDismissAlert/messages'
 import CommentIndex from '../comments/CommentIndex'
 
 const cardContainerLayout = {
@@ -13,30 +9,8 @@ const cardContainerLayout = {
 }
 
 const TransactionsIndex = (props) => {
-    const [transactions, setTransactions] = useState(null)
-    const [error, setError] = useState(false)
-    const { msgAlert, user } = props
 
-    useEffect(() => {
-        getAllTransactions()
-            .then(res => {
-                setTransactions(res.data.transactions.filter(transaction => transaction.owner._id === user._id))
-            })
-            .catch(err => {
-                msgAlert({
-                    heading: 'Error getting Transactions',
-                    message: messages.indexTransactionsFailure,
-                    variant: 'danger'
-                })
-                setError(true)
-            })
-    }, [])
-
-    // we need to account for multiple potential states of our data
-    // if we have an error
-    if (error) {
-        return <LoadingScreen />
-    }
+    const { msgAlert, user, transactions } = props
 
     // if the transactions aren't even loaded yet
     if (!transactions) {

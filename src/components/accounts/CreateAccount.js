@@ -21,7 +21,7 @@ const CreateAccount = (props)=> {
 
     return (
         <Button onClick={handleClick}>
-            Create Account To Trade
+            Create Account
         </Button>
     )
 }

@@ -54,6 +54,7 @@ const CommentIndex = (props) => {
               user={user}
               transaction={transaction}
               handleClose={handleClose}
+              triggerRefresh={() => setUpdated(prev => !prev)}
           />
         ))
           // />

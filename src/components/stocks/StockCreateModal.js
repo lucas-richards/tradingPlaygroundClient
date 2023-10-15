@@ -51,14 +51,6 @@ function StockCreateModal(props) {
         <Modal.Body>
           <Form onSubmit={onSubmit}>
             <Form.Group className="m-2">
-              <Form.Label>Name:</Form.Label>
-              <Form.Control 
-                  
-                  id="symbol"
-                  name="symbol"
-                  value={ stock.symbol }
-                  disabled
-              />
               <Form.Label>Symbol:</Form.Label>
               <Form.Control 
                   
@@ -67,7 +59,7 @@ function StockCreateModal(props) {
                   value={ stock.symbol }
                   disabled
               />
-              <Form.Label>Price:</Form.Label>
+              <Form.Label>Current Price:</Form.Label>
               <Form.Control 
                   
                   id="price"

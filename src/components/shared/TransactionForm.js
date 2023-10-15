@@ -14,7 +14,7 @@ const TransactionForm = (props) => {
     const [account, setAccount] = useState(null)
     const [transaction, setTransaction] = useState({
         symbol: stock.symbol,
-        buy: true,
+        buy: '',
         price: stock.price,
         quantity:0,
     })
@@ -120,15 +120,14 @@ const TransactionForm = (props) => {
             // send a success message
             .then(() => {
                 msgAlert({
-                    heading: 'Oh Yeah!',
-                    message: createTransactionSuccess,
+                    heading: 'Transaction was successful!',
                     variant: 'success'
                 })
             })
             // if it fails, keep the user on the create page and send a message
             .catch(() => {
                 msgAlert({
-                    heading: 'Oh no!',
+                    heading: 'Something went wrong, please try again',
                     message: createTransactionFailure,
                     variant: 'danger'
                 })

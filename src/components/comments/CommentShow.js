@@ -3,7 +3,7 @@ import { removeCommentSuccess, removeCommentFailure } from '../shared/AutoDismis
 import { removeComment } from '../../api/comment'
 
 const CommentShow = (props) => {
-    const { comment, idx, msgAlert, user, transaction } = props
+    const { comment, idx, msgAlert, user, transaction, triggerRefresh } = props
 
     const deleteComment = () => {
         // we want to remove the transaction
@@ -16,6 +16,7 @@ const CommentShow = (props) => {
                     variant: 'success',
                 })
             )
+            .then(() => triggerRefresh())
             
             // send a fail message if there is an error
             .catch(() =>
