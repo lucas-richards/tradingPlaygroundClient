@@ -15,6 +15,7 @@ This is the frontend for the full stack stock app for anyone that wants to pract
 AAU I want to...
 - Add stocks to my watchlist
 - See a list of all stocks
+- Update stock information
 - See a list of the stocks I invested in
 - See a single stock history
 - delete a stock from watchlist
