@@ -46,8 +46,8 @@ const StockIndex = (props) => {
     if (!stocks) {
         return <LoadingScreen />
     // if we have NO stocks
-    } else if (stocks.length === 0) {
-        return <p>No stocks yet, go add some!</p>
+    // } else if (stocks.length === 0) {
+    //     return <p>No stocks yet, go add some!</p>
     }
     
 
@@ -88,27 +88,32 @@ const StockIndex = (props) => {
         <>
         <Container className='m-2'>
             <h1>Watch List</h1>
+            {
+                stocks.length === 0?
+                <p className='m-5'>No stocks yet, go add some!</p>
+                :
+                <Table striped bordered hover>
+                    <thead>
+                    <tr>
+                        <th>Logo</th>
+                        <th>Symbol</th>
+                        <th>Last</th>
+                        <th>Sparkline</th>
+                        <th>change</th>
+                        <th>%change</th>
+                        <th>prev close</th>
+                        <th>low</th>
+                        <th>high</th>
+                        <th>volume</th>
+                        <th>last update</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        { stockCards }
+                    </tbody>
+                </Table>
+            }
 
-            <Table striped bordered hover>
-                <thead>
-                <tr>
-                    <th>Logo</th>
-                    <th>Symbol</th>
-                    <th>Last</th>
-                    <th>Sparkline</th>
-                    <th>change</th>
-                    <th>%change</th>
-                    <th>prev close</th>
-                    <th>low</th>
-                    <th>high</th>
-                    <th>volume</th>
-                    <th>last update</th>
-                </tr>
-                </thead>
-                <tbody>
-                    { stockCards }
-                </tbody>
-            </Table>
             <Link to='/create-stock' style={linkStyle} >
                 <svg width={20} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
                     <path d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />

@@ -39,6 +39,7 @@ const Wallet = (props) => {
 				.catch(
 					console.log('error fetching account')
 				)
+				
 		
 	},[])
 
