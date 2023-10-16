@@ -10,17 +10,12 @@ const authenticatedOptions = (
 	<>
 		<Nav.Item className='m-2'>
 			<Link to='stocks' style={linkStyle}>
-				My Stocks
+				My Watchlist
 			</Link>
 		</Nav.Item>
 		<Nav.Item className='m-2'>
 			<Link to='wallet' style={linkStyle}>
 				My Wallet
-			</Link>
-		</Nav.Item>
-		<Nav.Item className='m-2'>
-			<Link to='create-stock' style={linkStyle}>
-				Add Stock
 			</Link>
 		</Nav.Item>
 		<Nav.Item className='m-2'>
