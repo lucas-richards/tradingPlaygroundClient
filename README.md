@@ -1,6 +1,6 @@
 # Stock Playground API
 
-This is the frontend for the full stack stock app for anyone that wants to practice stock exchange for free and no risk.
+This is the frontend for the full stack stock app for anyone that wants to practice stock exchange for free and no risk. Is a simulated space where individuals can practice and learn about trading financial assets without using real money.
 
 ## Technologies Used
 
