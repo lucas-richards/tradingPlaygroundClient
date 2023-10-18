@@ -10,6 +10,10 @@ import { getHistory } from '../../api/other_api'
 import LineGraph from '../shared/StockGraph'
 import TransactionForm from '../shared/TransactionForm'
 
+const pageStyle = {
+    padding: '10px'
+}
+
 const StockShow = (props) => {
     const [stock, setStock] = useState(null)
     const [historyData, setHistoryData] = useState(null)
@@ -80,7 +84,7 @@ const StockShow = (props) => {
     }
 
     return (
-        <div className='m-2'>
+        <div style={pageStyle} className='m-2'>
             
             <Row  >
                 <Col md={8}  xs="auto">

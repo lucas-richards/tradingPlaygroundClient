@@ -6,9 +6,9 @@ const Home = (props) => {
 		backgroundImage : 'url(investment.jpeg) ',
 		backgroundRepeat : 'no-repeat',
 		backgroundSize: 'cover',
-		padding: '150px',
+		padding: '90px',
 		height: '900px',
-		color: 'white'
+		color: 'white',
 		
 	}
 
