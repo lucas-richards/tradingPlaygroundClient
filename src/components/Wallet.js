@@ -72,7 +72,7 @@ const Wallet = (props) => {
 							</Row>
 							:
 							<div>
-								<h4>Create an account to stat trading</h4>
+								<h4>Create an account to start trading</h4>
 								<CreateAccount 
 									user={user}
 									setAccount = {setAccount}
